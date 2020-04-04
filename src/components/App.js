@@ -1,19 +1,17 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
+import Sidebar from './Sidebar';
 
 function App() {
-  const classes = makeStyles();
-
   return (
-    <div className={classes.root}>
+    <div>
      <Grid container style={{height: '100vh'}}>
         <Grid item xs>
-          <Paper className={classes.paper} style={{height: '100%'}}>sidebar tree</Paper>
+          <Sidebar></Sidebar>
         </Grid>
         <Grid item xs={10}>
-          <Paper className={classes.paper} style={{height: '100%'}}>main viewer</Paper>
+          <Paper style={{height: '100%'}}>main viewer</Paper>
         </Grid>
       </Grid>
     </div>
