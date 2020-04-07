@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Fab from '@material-ui/core/Fab'
 import Paper from '@material-ui/core/Paper'
@@ -6,13 +6,25 @@ import Sidebar from './Sidebar'
 import IconButton from '@material-ui/core/IconButton'
 import MenuOpenIcon from '@material-ui/icons/MenuOpen'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import backendDataToDirectoryService from '../services/directoryTreeService'
 
-class MainLayout extends React.Component {
+class MainLayout extends Component {
     constructor() {    
         super(...arguments);    
         this.state = {      
-            visible: true    
+            visible: true,
+            directoryTree: {}    
         };
+    }
+
+    componentDidMount() {
+        const self = this;
+        fetch('https://localhost:44332/familyalbum')
+        .then(res => res.json())
+        .then((data) => {
+          self.setState({ directoryTree: backendDataToDirectoryService(data) })
+        })
+        .catch(console.log);
     }
  
     render() {
@@ -47,7 +59,7 @@ class MainLayout extends React.Component {
                             </IconButton>
                         </Grid>
 
-                        <Sidebar></Sidebar>
+                        <Sidebar treeData={this.state.directoryTree}></Sidebar>
                     </Grid>            
                 </Grid>
             )

@@ -1,32 +1,13 @@
-import React from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import TreeView from '@material-ui/lab/TreeView'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import TreeItem from '@material-ui/lab/TreeItem'
 import { makeStyles } from '@material-ui/core/styles'
 
-const data = {
-    id: 'root',
-    name: 'Parent',
-    children: [
-      {
-        id: '1',
-        name: 'Child - 1',
-      },
-      {
-        id: '3',
-        name: 'Child - 3',
-        children: [
-          {
-            id: '4',
-            name: 'Child - 4',
-          },
-        ],
-      },
-    ],
-  };  
+class DirectoryTree extends Component {
 
-class DirectoryTree extends React.Component {
     render() {
 
         const classes = makeStyles({
@@ -50,10 +31,14 @@ class DirectoryTree extends React.Component {
             defaultExpanded={['root']}
             defaultExpandIcon={<ChevronRightIcon />}
           >
-            {renderTree(data)}
+            {renderTree(this.props.treeData)}
           </TreeView>
         )
     }
+}
+
+DirectoryTree.propTypes = {
+  treeData : PropTypes.object
 }
 
 export default DirectoryTree;
