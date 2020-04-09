@@ -8,7 +8,7 @@ class Sidebar extends Component {
     render() {
 
         return (
-            <Grid container
+            <Grid container               
                 direction="column"
                 justify="flex-start"
                 alignItems="flex-start">

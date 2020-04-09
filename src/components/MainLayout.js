@@ -6,7 +6,6 @@ import Sidebar from './Sidebar'
 import IconButton from '@material-ui/core/IconButton'
 import MenuOpenIcon from '@material-ui/icons/MenuOpen'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import backendDataToDirectoryService from '../services/directoryTreeService'
 
 class MainLayout extends Component {
     constructor() {    
@@ -22,7 +21,7 @@ class MainLayout extends Component {
         fetch('https://localhost:44332/familyalbum')
         .then(res => res.json())
         .then((data) => {
-          self.setState({ directoryTree: backendDataToDirectoryService(data) })
+          self.setState({ directoryTree: data })
         })
         .catch(console.log);
     }
@@ -70,7 +69,9 @@ class MainLayout extends Component {
 
         return (
             <Grid container style={{height: '100vh'}}>
-                {sidebar}
+                <Grid item xs={2}>
+                    {sidebar}
+                </Grid>             
                 <Grid item xs={10}>
                     <Paper>main viewer</Paper>
                     {showMenuFab}
