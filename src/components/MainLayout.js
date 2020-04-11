@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Fab from '@material-ui/core/Fab'
-import Paper from '@material-ui/core/Paper'
 import Sidebar from './Sidebar'
+import MainViewer from './MainViewer'
 import IconButton from '@material-ui/core/IconButton'
 import MenuOpenIcon from '@material-ui/icons/MenuOpen'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
@@ -12,7 +12,8 @@ class MainLayout extends Component {
         super(...arguments);    
         this.state = {      
             visible: true,
-            directoryTree: {}    
+            directoryTree: {},
+            selectedNode: null    
         };
     }
 
@@ -21,9 +22,38 @@ class MainLayout extends Component {
         fetch('https://localhost:44332/familyalbum')
         .then(res => res.json())
         .then((data) => {
-          self.setState({ directoryTree: data })
+            self.setState({ 
+              directoryTree: data,
+              directoryCache: self.createCache(data) 
+            })
         })
-        .catch(console.log);
+        .catch(console.log)
+    }
+
+    createCacheInternal(cache, node) {
+        if(typeof node.id !== 'undefined') {
+            cache[node.id] = node
+        }
+
+        if(node.children) {
+            for(const subitem of node.children) {
+                this.createCacheInternal(cache, subitem)
+            }
+        }
+    }
+
+    createCache(data) {
+        const cache = { }
+            
+        this.createCacheInternal(cache, data)
+
+        this.setState({
+            cache
+        })
+    }
+
+    findSelectedNode(nodeId) {
+        return this.state?.cache[nodeId]
     }
  
     render() {
@@ -42,7 +72,6 @@ class MainLayout extends Component {
                 <ArrowForwardIosIcon />
             </Fab>
         )
-
         
         if(this.state.visible) {
             sidebar = (
@@ -58,7 +87,11 @@ class MainLayout extends Component {
                             </IconButton>
                         </Grid>
 
-                        <Sidebar treeData={this.state.directoryTree}></Sidebar>
+                        <Sidebar treeData={this.state.directoryTree} onNodeSelect={(event, value) => {
+                            this.setState({
+                                selectedNode : this.findSelectedNode(value)
+                            })
+                        }}></Sidebar>
                     </Grid>            
                 </Grid>
             )
@@ -73,7 +106,7 @@ class MainLayout extends Component {
                     {sidebar}
                 </Grid>             
                 <Grid item xs={10}>
-                    <Paper>main viewer</Paper>
+                    <MainViewer itemLabel={this.state.selectedNode?.name ?? ''}></MainViewer>
                     {showMenuFab}
                 </Grid>
             </Grid>  

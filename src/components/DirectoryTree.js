@@ -19,7 +19,7 @@ class DirectoryTree extends Component {
           });
   
         const renderTree = (nodes) => (
-          <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.name}>
+          <TreeItem key={nodes.id?.toString()} nodeId={nodes.id?.toString()} label={nodes.name}>
             {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
           </TreeItem>
         )
@@ -30,6 +30,7 @@ class DirectoryTree extends Component {
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpanded={['root']}
             defaultExpandIcon={<ChevronRightIcon />}
+            onNodeSelect={this.props.onNodeSelect}
           >
             {renderTree(this.props.treeData)}
           </TreeView>
@@ -38,7 +39,8 @@ class DirectoryTree extends Component {
 }
 
 DirectoryTree.propTypes = {
-  treeData : PropTypes.object
+  treeData : PropTypes.object,
+  onNodeSelect : PropTypes.func
 }
 
 export default DirectoryTree;

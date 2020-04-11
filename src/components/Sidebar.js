@@ -13,7 +13,7 @@ class Sidebar extends Component {
                 justify="flex-start"
                 alignItems="flex-start">
                 <Grid item>
-                    <DirectoryTree treeData={this.props.treeData}></DirectoryTree>
+                    <DirectoryTree treeData={this.props.treeData} onNodeSelect={this.props.onNodeSelect}></DirectoryTree>
                 </Grid>
                 <Grid item>
                     <Paper>sidebar</Paper>
@@ -25,7 +25,8 @@ class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
-    treeData : PropTypes.object
+    treeData : PropTypes.object,
+    onNodeSelect : PropTypes.func
   }
 
 export default Sidebar
