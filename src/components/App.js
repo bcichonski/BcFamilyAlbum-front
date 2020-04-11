@@ -3,7 +3,7 @@ import MainLayout from './MainLayout'
 
 function App() {
   return (
-    <div>
+    <div style={{height: '100vh'}}>
       <MainLayout />
     </div>
   );

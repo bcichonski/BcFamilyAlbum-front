@@ -19,7 +19,7 @@ class MainLayout extends Component {
 
     componentDidMount() {
         const self = this;
-        fetch('https://localhost:44332/familyalbum')
+        fetch('https://localhost:44332/albuminfo')
         .then(res => res.json())
         .then((data) => {
             self.setState({ 
@@ -55,9 +55,18 @@ class MainLayout extends Component {
     findSelectedNode(nodeId) {
         return this.state?.cache[nodeId]
     }
+
+    endsWithAny(suffixes, string) {
+        for (let suffix of suffixes) {
+            if(string.endsWith(suffix))
+                return true;
+        }
+        return false;
+    }
  
     render() {
 
+        let sidebarXs = 0
         let sidebar = (
             <span />
         )
@@ -75,8 +84,15 @@ class MainLayout extends Component {
         
         if(this.state.visible) {
             sidebar = (
-                <Grid item xs>
-                    <Grid container alignItems="flex-end" direction="column">
+                <Grid item xs style={{height: '100%'}}>
+                    <Grid container alignItems="flex-end" direction="column" 
+                        style={{
+                            overflowY: 'auto', 
+                            overflowX: 'hidden',
+                            height: '100%', 
+                            flexGrow: 0,
+                            flexWrap: 'nowrap'
+                        }}>
                         <Grid item>
                             <IconButton aria-label="hide menu" onClick={() => {
                                 this.setState({
@@ -98,15 +114,28 @@ class MainLayout extends Component {
             showMenuFab = (
                 <span></span>
             )
+            sidebarXs = 2
         }
 
+        let itemType = 'nothing'
+        const itemName = this.state.selectedNode?.name ?? ''
+        if(itemName.includes('.')) {
+            if(this.endsWithAny(['.avi','.mkv', '.mp4'], itemName)) {
+                itemType = 'video'
+            } else {
+                itemType = 'picture'
+            }
+        }
+
+        const itemUrl = 'https://localhost:44332/albuminfo/'+this.state.selectedNode?.id
+
         return (
-            <Grid container style={{height: '100vh'}}>
-                <Grid item xs={2}>
+            <Grid container style={{height: '100%'}}>
+                <Grid item xs={sidebarXs} style={{height: '100%'}} id='sidebar-div'>
                     {sidebar}
                 </Grid>             
-                <Grid item xs={10}>
-                    <MainViewer itemLabel={this.state.selectedNode?.name ?? ''}></MainViewer>
+                <Grid item xs={12 - sidebarXs} style={{height: '100%'}}>
+                    <MainViewer itemLabel={itemName} itemType={itemType} itemUrl={itemUrl}></MainViewer>
                     {showMenuFab}
                 </Grid>
             </Grid>  

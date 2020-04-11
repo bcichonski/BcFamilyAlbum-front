@@ -8,10 +8,11 @@ class Sidebar extends Component {
     render() {
 
         return (
-            <Grid container               
+            <Grid container           
                 direction="column"
                 justify="flex-start"
-                alignItems="flex-start">
+                alignItems="flex-start"          
+                >
                 <Grid item>
                     <DirectoryTree treeData={this.props.treeData} onNodeSelect={this.props.onNodeSelect}></DirectoryTree>
                 </Grid>
