@@ -15,10 +15,20 @@ class DirectoryTree extends Component {
       if(stateStr) {
         expandedState = JSON.parse(stateStr)
       }
-      
+          
       this.state = {      
           expanded: expandedState   
       };
+    }
+
+    componentDidMount() {
+      const selectedState = localStorage.getItem('directoryTreeSelected')
+
+      this.setState({
+        selected: selectedState
+      })
+      
+      this.props.onNodeSelect(null, selectedState)
     }
 
     render() {
@@ -41,10 +51,11 @@ class DirectoryTree extends Component {
           <TreeView
             className={classes.root}
             defaultCollapseIcon={<ExpandMoreIcon />}
-            defaultExpanded={['root']}
+            defaultExpanded={['the album']}
             defaultExpandIcon={<ChevronRightIcon />}
+            selected={this.state.selected}
             expanded={this.state.expanded}
-            onNodeSelect={this.props.onNodeSelect}
+            onNodeSelect={(event, value) => this.nodeSelect(event, value)}
             onNodeToggle={(event, nodeIds) => this.nodeToggle(event, nodeIds)}
           >
             {renderTree(this.props.treeData)}
@@ -53,10 +64,18 @@ class DirectoryTree extends Component {
     }
 
     nodeToggle(event, nodeIds) {
-      localStorage.setItem('directoryTreeState', JSON.stringify(nodeIds));
+      localStorage.setItem('directoryTreeState', JSON.stringify(nodeIds))
       this.setState({
         expanded: nodeIds
       })
+    }
+
+    nodeSelect(event, value) {
+      localStorage.setItem('directoryTreeSelected', value)
+      this.setState({
+        selected: value
+      })
+      this.props.onNodeSelect(event, value)
     }
 }
 

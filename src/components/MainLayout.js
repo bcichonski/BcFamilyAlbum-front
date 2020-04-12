@@ -50,10 +50,14 @@ class MainLayout extends Component {
         this.setState({
             cache
         })
+
+        if(this.defaultNodeSelected) {
+            this.nodeSelected(null, this.defaultNodeSelected)
+        }
     }
 
     findSelectedNode(nodeId) {
-        return this.state?.cache[nodeId]
+        return this.state?.cache[nodeId] ?? undefined
     }
 
     endsWithAny(suffixes, string) {
@@ -103,11 +107,8 @@ class MainLayout extends Component {
                             </IconButton>
                         </Grid>
 
-                        <Sidebar treeData={this.state.directoryTree} onNodeSelect={(event, value) => {
-                            this.setState({
-                                selectedNode : this.findSelectedNode(value)
-                            })
-                        }}></Sidebar>
+                        <Sidebar treeData={this.state.directoryTree} onNodeSelect={(event, value) => this.nodeSelected(event, value)}>                           
+                        </Sidebar>
                     </Grid>            
                 </Grid>
             )
@@ -140,6 +141,16 @@ class MainLayout extends Component {
                 </Grid>
             </Grid>  
         )
+    }
+
+    nodeSelected(event, value) {
+        if(this.state.cache) {
+            this.setState({
+                selectedNode : this.findSelectedNode(value)
+            })
+        } else {
+            this.defaultNodeSelected = value
+        } 
     }
 }
 
