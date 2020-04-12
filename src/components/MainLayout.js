@@ -93,7 +93,7 @@ class MainLayout extends Component {
                             flexGrow: 0,
                             flexWrap: 'nowrap'
                         }}>
-                        <Grid item>
+                        <Grid item className='hide-menu'>
                             <IconButton aria-label="hide menu" onClick={() => {
                                 this.setState({
                                     visible : false

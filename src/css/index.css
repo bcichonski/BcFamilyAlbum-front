@@ -24,3 +24,73 @@ img.center {
   display: block;
   margin: auto;
 }
+
+div.video-react {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  margin: auto;
+}
+
+div.hide-menu {
+  position: absolute;
+  left: auto;
+  z-index: 1;
+}
+
+span.viewer-action-bar:not(:hover) {
+  opacity: 0.0;
+  transition: opacity 1s ease-out;
+}
+
+span.viewer-action-bar {
+  position: relative;
+  margin: auto;
+}
+
+.viewer-action-bar:hover {
+  opacity: 1.0;
+  transition: opacity 1s ease-out;
+}
+
+.viewer-action-bar-wrapper {
+  position: absolute;
+  bottom: 0px;
+}
+
+button.rectangular {
+  border-radius: 0%;
+}
+
+button.main-view-nav {
+  height:100%;
+  position:fixed;
+  top:0px;
+  width:5vw;
+}
+
+button.main-view-nav:not(:hover) {
+  opacity: 0.0;
+  transition: opacity 1s ease-out;
+}
+
+button.main-view-nav:hover {
+  opacity: 1.0;
+  transition: opacity 1s ease-out;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+button.main-view-nav-prev {
+}
+
+button.main-view-nav-next {
+  right:0px;
+}
+
+.hide-menu > button {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.hide-menu > button:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}

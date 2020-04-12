@@ -7,6 +7,12 @@ import TreeItem from '@material-ui/lab/TreeItem'
 import { makeStyles } from '@material-ui/core/styles'
 
 class DirectoryTree extends Component {
+    constructor() {    
+      super(...arguments);    
+      this.state = {      
+          expanded: []    
+      };
+    }
 
     render() {
 
@@ -30,6 +36,7 @@ class DirectoryTree extends Component {
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpanded={['root']}
             defaultExpandIcon={<ChevronRightIcon />}
+            
             onNodeSelect={this.props.onNodeSelect}
           >
             {renderTree(this.props.treeData)}
