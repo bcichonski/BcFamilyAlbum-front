@@ -46,6 +46,23 @@ span.viewer-action-bar:not(:hover) {
 span.viewer-action-bar {
   position: relative;
   margin: auto;
+  width: fit-content;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.viewer-action-bar > button {
+  margin-left: 1vw;
+  margin-right: 1.vw; 
+}
+
+.viewer-action-bar:not(:hover) {
+  opacity: 0.0;
+  transition: opacity 1s ease-out;
+}
+
+.viewer-action-bar:hover {
+  opacity: 1.0;
+  transition: opacity 1s ease-out;
 }
 
 .viewer-action-bar:hover {
@@ -56,6 +73,7 @@ span.viewer-action-bar {
 .viewer-action-bar-wrapper {
   position: absolute;
   bottom: 0px;
+  width: 100%;
 }
 
 button.rectangular {

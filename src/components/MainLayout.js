@@ -6,6 +6,7 @@ import MainViewer from './MainViewer'
 import IconButton from '@material-ui/core/IconButton'
 import MenuOpenIcon from '@material-ui/icons/MenuOpen'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import BackendService from '../services/BackendService'
 
 class MainLayout extends Component {
     constructor() {    
@@ -15,19 +16,17 @@ class MainLayout extends Component {
             directoryTree: {},
             selectedNode: null    
         };
+        this.service = new BackendService('https://localhost:44332/')
     }
 
     componentDidMount() {
         const self = this;
-        fetch('https://localhost:44332/albuminfo')
-        .then(res => res.json())
-        .then((data) => {
+        this.service.fetchAlbumInfo((data) => {
             self.setState({ 
               directoryTree: data,
               directoryCache: self.createCache(data) 
             })
         })
-        .catch(console.log)
     }
 
     createCacheInternal(cache, node) {
@@ -128,7 +127,7 @@ class MainLayout extends Component {
             }
         }
 
-        const itemUrl = 'https://localhost:44332/albuminfo/'+this.state.selectedNode?.id
+        const itemUrl = this.service.getItemUrl(this.state.selectedNode?.id)
 
         return (
             <Grid container style={{height: '100%'}}>
@@ -136,7 +135,14 @@ class MainLayout extends Component {
                     {sidebar}
                 </Grid>             
                 <Grid item xs={12 - sidebarXs} style={{height: '100%'}}>
-                    <MainViewer itemLabel={itemName} itemType={itemType} itemUrl={itemUrl}></MainViewer>
+                    <MainViewer
+                        onDelete={()=>{ this.deleteNode() }}
+                        onPrev={()=>{ this.prevNode() }}
+                        onNext={()=>{ this.nextNode() }}
+                        itemLabel={itemName} 
+                        itemType={itemType} 
+                        itemUrl={itemUrl}>
+                    </MainViewer>
                     {showMenuFab}
                 </Grid>
             </Grid>  
@@ -151,6 +157,47 @@ class MainLayout extends Component {
         } else {
             this.defaultNodeSelected = value
         } 
+    }
+
+    deleteNode() {
+        this.service.deleteItem(this.state.selectedNode.id, (id) => {
+            this.nextNode()
+            
+            const newTree = this.cloneTreeDeepWith(this.state.directoryTree, (node) => {
+                return (node.id !== id)
+            })
+
+            this.setState({
+                directoryTree: newTree,
+                cache: this.createCache(newTree)
+            })
+        })
+    }
+
+    cloneTreeDeepWith(source, predicate) {
+        if(predicate(source)){
+            const newSource = {
+                id: source.id,
+                name: source.name,
+                children: []
+            }
+
+            for(let child of source.children) {
+                if(predicate(child)) {
+                    newSource.children.push(child);
+                }
+            }
+
+            return newSource;
+        }
+    }
+
+    prevNode() {
+
+    }
+
+    nextNode() {
+
     }
 }
 

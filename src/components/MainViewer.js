@@ -1,11 +1,12 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import '../../node_modules/video-react/dist/video-react.css'
-import Paper from '@material-ui/core/Paper'
-import { Player, LoadingSpinner } from 'video-react'
-import ViewerActionBar from './ViewerActionBar'
 import IconButton from '@material-ui/core/IconButton'
-import MenuOpenIcon from '@material-ui/icons/MenuOpen'
+import Paper from '@material-ui/core/Paper'
+import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import { LoadingSpinner, Player } from 'video-react'
+import '../../node_modules/video-react/dist/video-react.css'
+import ViewerActionBar from './ViewerActionBar'
 
 class MainViewer extends Component {
 
@@ -35,20 +36,14 @@ class MainViewer extends Component {
         return (
           <Paper style={{height: '100%', width: '100%'}}>
               {subitem}
-              <ViewerActionBar></ViewerActionBar>
-              <IconButton className='main-view-nav main-view-nav-prev rectangular' onClick={() => {
-                    /*this.setState({
-                        visible : false
-                    })*/
-                }}>
-                <MenuOpenIcon />
+              <ViewerActionBar 
+                onDelete={this.props.onDelete}
+                ></ViewerActionBar>
+              <IconButton className='main-view-nav main-view-nav-prev rectangular' onClick={this.props.onPrev}>
+                <KeyboardArrowLeftIcon />
               </IconButton>
-              <IconButton className='main-view-nav main-view-nav-next rectangular' onClick={() => {
-                    /*this.setState({
-                        visible : false
-                    })*/
-                  }}>
-                  <MenuOpenIcon />
+              <IconButton className='main-view-nav main-view-nav-next rectangular' onClick={this.props.onNext}>
+                  <KeyboardArrowRightIcon />
               </IconButton>
           </Paper>
         )
@@ -58,7 +53,10 @@ class MainViewer extends Component {
 MainViewer.propTypes = {
   itemLabel : PropTypes.string,
   itemType : PropTypes.string,
-  itemUrl : PropTypes.string
+  itemUrl : PropTypes.string,
+  onDelete : PropTypes.func,
+  onPrev : PropTypes.func,
+  onNext : PropTypes.func
 }
 
 export default MainViewer;
