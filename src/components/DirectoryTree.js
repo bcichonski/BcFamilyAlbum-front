@@ -51,7 +51,6 @@ class DirectoryTree extends Component {
           <TreeView
             className={classes.root}
             defaultCollapseIcon={<ExpandMoreIcon />}
-            defaultExpanded={['the album']}
             defaultExpandIcon={<ChevronRightIcon />}
             selected={this.state.selected}
             expanded={this.state.expanded}

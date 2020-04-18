@@ -1,3 +1,22 @@
+# BcFamilyAlbum - front
+
+# Changelog
+0.1.3 2020-04-13 2115987a Refactor all backend communication in dedicated service class
+0.1.2 2020-04-12 f2dd8483 Add navigation buttons, preserve album tree and selected note state in local storage
+0.1.1 2020-04-11 03ca56af Change layout, show pictures and stream videos
+0.1.0 2020-04-09 1b9163fe Changes induced by modifications in album data format
+0.0.4 2020-04-07 b2b168a2 Receive album structure data from the backend
+0.0.3 2020-04-06 0fc9bd6b Foldable sidebar
+0.0.2 2020-04-04 62e4bf14 Reorganize source code structure, basic component layout utilizing material-ui
+0.0.1 2020-04-04 7a9e79d2 Initial version that uses React and display something
+
+
+
+
+
+
+
+# Original content
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
