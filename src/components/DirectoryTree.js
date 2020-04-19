@@ -17,7 +17,8 @@ class DirectoryTree extends Component {
       }
           
       this.state = {      
-          expanded: expandedState   
+          expanded: expandedState,   
+          selected: []
       };
     }
 
