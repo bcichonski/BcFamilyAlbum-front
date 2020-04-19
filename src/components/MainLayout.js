@@ -14,17 +14,23 @@ class MainLayout extends Component {
         this.state = {      
             visible: true,
             directoryTree: {},
-            selectedNode: null    
+            selectedNode: null,   
+            cache:[] 
         };
         this.service = new BackendService('https://localhost:44332/')
     }
 
     componentDidMount() {
-        const self = this;
+        const self = this
+        const selectedNodeId = localStorage.getItem('directoryTreeSelectedNodeId')
+
         this.service.fetchAlbumInfo((data) => {
+            self.createCache(data)
+            const selectedNode = self.state.cache[selectedNodeId]
+
             self.setState({ 
               directoryTree: data,
-              directoryCache: self.createCache(data) 
+              selectedNode:selectedNode
             })
         })
     }
@@ -121,7 +127,9 @@ class MainLayout extends Component {
                             </IconButton>
                         </Grid>
 
-                        <Sidebar treeData={this.state.directoryTree} onNodeSelect={(event, value) => this.nodeSelected(event, value)}>                           
+                        <Sidebar treeData={this.state.directoryTree} 
+                            onNodeSelect={(event, value) => this.nodeSelected(event, value)}
+                            selectedNodeId={(this.state.selectedNode?.id.toString() ?? "0")}>                           
                         </Sidebar>
                     </Grid>            
                 </Grid>
@@ -166,6 +174,7 @@ class MainLayout extends Component {
     }
 
     nodeSelected(event, value) {
+        localStorage.setItem('directoryTreeSelectedNodeId', value)
         if(this.state.cache) {
             this.setState({
                 selectedNode : this.findSelectedNode(value)

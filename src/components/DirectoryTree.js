@@ -17,19 +17,11 @@ class DirectoryTree extends Component {
       }
           
       this.state = {      
-          expanded: expandedState,   
-          selected: []
+          expanded: expandedState
       };
     }
 
     componentDidMount() {
-      const selectedState = localStorage.getItem('directoryTreeSelected')
-
-      this.setState({
-        selected: selectedState
-      })
-      
-      this.props.onNodeSelect(null, selectedState)
     }
 
     render() {
@@ -53,9 +45,9 @@ class DirectoryTree extends Component {
             className={classes.root}
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}
-            selected={this.state.selected}
+            selected={this.props.selectedNodeId}
             expanded={this.state.expanded}
-            onNodeSelect={(event, value) => this.nodeSelect(event, value)}
+            onNodeSelect={this.props.onNodeSelect}
             onNodeToggle={(event, nodeIds) => this.nodeToggle(event, nodeIds)}
           >
             {renderTree(this.props.treeData)}
@@ -69,19 +61,12 @@ class DirectoryTree extends Component {
         expanded: nodeIds
       })
     }
-
-    nodeSelect(event, value) {
-      localStorage.setItem('directoryTreeSelected', value)
-      this.setState({
-        selected: value
-      })
-      this.props.onNodeSelect(event, value)
-    }
 }
 
 DirectoryTree.propTypes = {
   treeData : PropTypes.object,
-  onNodeSelect : PropTypes.func
+  onNodeSelect : PropTypes.func,
+  selectedNodeId : PropTypes.string
 }
 
 export default DirectoryTree;

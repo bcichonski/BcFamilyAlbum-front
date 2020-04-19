@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import Container from '@material-ui/core/Container'
 import PropTypes from 'prop-types'
 import useFitText from "use-fit-text";
