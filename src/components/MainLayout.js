@@ -29,16 +29,30 @@ class MainLayout extends Component {
         })
     }
 
-    createCacheInternal(cache, node) {
+    createCacheInternal(cache, node, prevLeaf) {
         if(typeof node.id !== 'undefined') {
             cache[node.id] = node
         }
 
         if(node.children) {
             for(const subitem of node.children) {
-                this.createCacheInternal(cache, subitem)
+                //this is required for faster navigation through the tree
+                subitem.parent = node
+                
+                if((subitem.children?.length ?? 0) === 0) {
+                    if(prevLeaf) {
+                        prevLeaf.nextLeaf = subitem
+                    }
+                    
+                    subitem.prevLeaf = prevLeaf
+                    prevLeaf = subitem
+                }
+
+                prevLeaf = this.createCacheInternal(cache, subitem, prevLeaf)
             }
         }
+
+        return prevLeaf
     }
 
     createCache(data) {
@@ -193,11 +207,19 @@ class MainLayout extends Component {
     }
 
     prevNode() {
+        const currentNode = this.state.selectedNode
 
+        this.setState({
+            selectedNode : currentNode.prevLeaf
+        })
     }
 
     nextNode() {
+        const currentNode = this.state.selectedNode
 
+        this.setState({
+            selectedNode : currentNode.nextLeaf
+        })
     }
 }
 
