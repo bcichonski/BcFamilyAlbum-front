@@ -38,6 +38,7 @@ class MainLayout extends Component {
             for(const subitem of node.children) {
                 //this is required for faster navigation through the tree
                 subitem.parent = node
+                subitem.label = (node?.label ?? '') + '\\' + subitem.name
                 
                 if((subitem.children?.length ?? 0) === 0) {
                     if(prevLeaf) {
@@ -132,6 +133,7 @@ class MainLayout extends Component {
         }
 
         let itemType = 'nothing'
+        const itemLabel = this.state.selectedNode?.label ?? ''
         const itemName = this.state.selectedNode?.name ?? ''
         if(itemName.includes('.')) {
             if(this.endsWithAny(['.avi','.mkv', '.mp4'], itemName)) {
@@ -153,7 +155,7 @@ class MainLayout extends Component {
                         onDelete={()=>{ this.deleteNode() }}
                         onPrev={()=>{ this.prevNode() }}
                         onNext={()=>{ this.nextNode() }}
-                        itemLabel={itemName} 
+                        itemLabel={itemLabel} 
                         itemType={itemType} 
                         itemUrl={itemUrl}>
                     </MainViewer>

@@ -112,3 +112,37 @@ button.main-view-nav-next {
 .hide-menu > button:hover {
   background-color: rgba(0, 0, 0, 0.2);
 }
+
+span.title-bar:not(:hover) {
+  opacity: 0.0;
+  transition: opacity 1s ease-out;
+}
+
+span.title-bar {
+  position: relative;
+  margin: auto;
+  display: flex;
+  width: fit-content;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.title-bar:not(:hover) {
+  opacity: 0.0;
+  transition: opacity 1s ease-out;
+}
+
+.title-bar:hover {
+  opacity: 1.0;
+  transition: opacity 1s ease-out;
+}
+
+.title-bar:hover {
+  opacity: 1.0;
+  transition: opacity 1s ease-out;
+}
+
+.title-bar-wrapper {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+}

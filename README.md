@@ -1,6 +1,7 @@
 # BcFamilyAlbum - front
 
 # Changelog
+0.1.4 2020-04-19          Add navigation for the previous and next item to show. Add show item title bar.
 0.1.3 2020-04-13 2115987a Refactor all backend communication in dedicated service class
 0.1.2 2020-04-12 f2dd8483 Add navigation buttons, preserve album tree and selected note state in local storage
 0.1.1 2020-04-11 03ca56af Change layout, show pictures and stream videos

@@ -7,6 +7,7 @@ import React, { Component } from 'react'
 import { LoadingSpinner, Player } from 'video-react'
 import '../../node_modules/video-react/dist/video-react.css'
 import ViewerActionBar from './ViewerActionBar'
+import TitleBar from './TitleBar'
 
 class MainViewer extends Component {
 
@@ -36,6 +37,7 @@ class MainViewer extends Component {
         return (
           <Paper style={{height: '100%', width: '100%'}}>
               {subitem}
+              <TitleBar title={this.props.itemLabel}/>
               <ViewerActionBar 
                 onDelete={this.props.onDelete}
                 ></ViewerActionBar>
