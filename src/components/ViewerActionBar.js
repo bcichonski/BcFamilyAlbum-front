@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import MenuOpenIcon from '@material-ui/icons/MenuOpen'
+//import MenuOpenIcon from '@material-ui/icons/MenuOpen'
+import RotateRightIcon from '@material-ui/icons/RotateRight'
 import Container from '@material-ui/core/Container'
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton'
@@ -13,20 +14,16 @@ class ViewerActionBar extends Component {
                     <IconButton aria-label="delete" onClick={this.props.onDelete}>
                         <DeleteIcon />
                     </IconButton>
-                    <IconButton aria-label="rename" onClick={() => {
-                            this.setState({
-                                visible: false
-                            })
-                        }}>
-                        <MenuOpenIcon />
+                    <IconButton aria-label="rotate" onClick={this.props.onRotate}>
+                        <RotateRightIcon />
                     </IconButton>
-                    <IconButton aria-label="rotate" onClick={() => {
-                            this.setState({
-                                visible: false
-                            })
-                        }}>
+                    {/*<IconButton aria-label="rename" onClick={() => {
+                        this.setState({
+                            visible: false
+                        })
+                    }}>
                         <MenuOpenIcon />
-                    </IconButton>
+                </IconButton>*/}
                 </Container>
             </Container>
         )
@@ -34,7 +31,8 @@ class ViewerActionBar extends Component {
 }
 
 ViewerActionBar.propTypes = {
-    onDelete : PropTypes.func
+    onDelete: PropTypes.func,
+    onRotate: PropTypes.func
 }
 
 export default ViewerActionBar

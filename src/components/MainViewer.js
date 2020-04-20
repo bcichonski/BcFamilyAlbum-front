@@ -17,7 +17,7 @@ class MainViewer extends Component {
         if(this.props.itemType === "picture") {
           subitem = (
             <img style={{objectFit: 'cover', maxWidth:'100%', maxHeight:'100%', height:'inherit'}} 
-              src={this.props.itemUrl} 
+              src={this.props.itemUrl}
               alt={this.props.itemName}
               className="center">
             </img>
@@ -40,6 +40,7 @@ class MainViewer extends Component {
               <TitleBar title={this.props.itemLabel}/>
               <ViewerActionBar 
                 onDelete={this.props.onDelete}
+                onRotate={this.props.onRotate}
                 ></ViewerActionBar>
               <IconButton className='main-view-nav main-view-nav-prev rectangular' onClick={this.props.onPrev}>
                 <KeyboardArrowLeftIcon />
@@ -57,6 +58,7 @@ MainViewer.propTypes = {
   itemType : PropTypes.string,
   itemUrl : PropTypes.string,
   onDelete : PropTypes.func,
+  onRotate: PropTypes.func,
   onPrev : PropTypes.func,
   onNext : PropTypes.func
 }
