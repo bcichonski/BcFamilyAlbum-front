@@ -40,7 +40,9 @@ class MainViewer extends Component {
               <TitleBar title={this.props.itemLabel}/>
               <ViewerActionBar 
                 onDelete={this.props.onDelete}
+                deleteEnabled={this.props.deleteEnabled}
                 onRotate={this.props.onRotate}
+                rotateEnabled={this.props.rotateEnabled}
                 ></ViewerActionBar>
               <IconButton className='main-view-nav main-view-nav-prev rectangular' onClick={this.props.onPrev}>
                 <KeyboardArrowLeftIcon />
@@ -60,7 +62,9 @@ MainViewer.propTypes = {
   onDelete : PropTypes.func,
   onRotate: PropTypes.func,
   onPrev : PropTypes.func,
-  onNext : PropTypes.func
+  onNext : PropTypes.func,
+  deleteEnabled : PropTypes.bool,
+  rotateEnabled : PropTypes.bool
 }
 
 export default MainViewer;

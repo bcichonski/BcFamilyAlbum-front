@@ -15,7 +15,9 @@ class MainLayout extends Component {
             visible: true,
             directoryTree: {},
             selectedNode: null,
-            cache: []
+            cache: [],
+            deleteEnabled: true,
+            rotateEnabled: true
         };
         this.service = new BackendService('https://localhost:44332/')
     }
@@ -186,6 +188,9 @@ class MainLayout extends Component {
     }
 
     deleteNode() {
+        this.setState({
+            deleteEnabled: false
+        })
         this.service.deleteItem(this.state.selectedNode.id, (id) => {
             this.nextNode()
 
@@ -197,13 +202,26 @@ class MainLayout extends Component {
                 directoryTree: newTree,
                 cache: this.createCache(newTree)
             })
-        })
+        },
+            () => {
+                this.setState({
+                    deleteEnabled: true
+                })
+            })
     }
 
     rotateNode() {
-        this.service.rotateItem(this.state.selectedNode.id, (id) => {
-            this.forceUpdate()
+        this.setState({
+            rotateEnabled: false
         })
+        this.service.rotateItem(this.state.selectedNode.id, (id) => {
+                this.forceUpdate()
+            },
+            () => {
+                this.setState({
+                    rotateEnabled: true
+                })
+            })
     }
 
     cloneTreeDeepWith(source, predicate) {
@@ -214,14 +232,14 @@ class MainLayout extends Component {
                 children: []
             }
 
-            if(source.children) {
+            if (source.children) {
                 for (let child of source.children) {
                     if (predicate(child)) {
                         newSource.children.push(this.cloneTreeDeepWith(child, predicate));
                     }
                 }
             }
-            
+
             return newSource;
         }
     }

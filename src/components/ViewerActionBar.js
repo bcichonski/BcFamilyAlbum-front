@@ -11,10 +11,10 @@ class ViewerActionBar extends Component {
         return (
             <Container className='viewer-action-bar-wrapper'>
                 <Container component='span' className='viewer-action-bar'>
-                    <IconButton aria-label="delete" onClick={this.props.onDelete}>
+                    <IconButton aria-label="delete" onClick={this.props.onDelete} disabled={!this.props.deleteEnabled}>
                         <DeleteIcon />
                     </IconButton>
-                    <IconButton aria-label="rotate" onClick={this.props.onRotate}>
+                    <IconButton aria-label="rotate" onClick={this.props.onRotate} disabled={!this.props.rotateEnabled}>
                         <RotateRightIcon />
                     </IconButton>
                     {/*<IconButton aria-label="rename" onClick={() => {
@@ -32,7 +32,14 @@ class ViewerActionBar extends Component {
 
 ViewerActionBar.propTypes = {
     onDelete: PropTypes.func,
+    deleteEnabled: PropTypes.bool,
+    rotateEnabled: PropTypes.bool,
     onRotate: PropTypes.func
 }
+
+ViewerActionBar.defaultProps = {
+    deleteEnabled: true,
+    rotateEnabled: true
+};
 
 export default ViewerActionBar
