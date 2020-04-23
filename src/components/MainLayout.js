@@ -192,6 +192,19 @@ class MainLayout extends Component {
             deleteEnabled: false
         })
         this.service.deleteItem(this.state.selectedNode.id, (id) => {
+            const currentNode = this.state.selectedNode
+            
+            if(currentNode.prevLeaf) {
+                if(currentNode.nextLeaf) {
+                    currentNode.nextLeaf.prevLeaf = currentNode.prevLeaf
+                    currentNode.prevLeaf.nextLeaf = currentNode.nextLeaf
+                } else {
+                    currentNode.prevLeaf.nextLeaf = null
+                }
+            } else {
+                currentNode.nextLeaf.prevLeaf = null
+            }
+
             this.nextNode()
 
             const newTree = this.cloneTreeDeepWith(this.state.directoryTree, (node) => {
