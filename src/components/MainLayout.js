@@ -30,11 +30,15 @@ class MainLayout extends Component {
         this.service.fetchAlbumInfo((data) => {
             self.createCache(data)
             const selectedNode = self.state.cache[selectedNodeId]
-            
+
             let expandedTreeNodes = []
             const stateStr = localStorage.getItem('directoryTreeState')
-            if(stateStr) {
-                expandedTreeNodes = JSON.parse(stateStr)
+            if (stateStr) {
+                try {
+                    expandedTreeNodes = JSON.parse(stateStr)
+                } catch {
+                    console.warn("There was a problem with reading the album tree state.")
+                }
             }
 
             self.setState({
@@ -42,6 +46,8 @@ class MainLayout extends Component {
                 selectedNode,
                 expandedTreeNodes,
             })
+
+            self.ensureNodeIsUnfolded(selectedNode)
         })
     }
 
@@ -138,8 +144,8 @@ class MainLayout extends Component {
                         </Grid>
 
                         <Sidebar treeData={this.state.directoryTree}
-                            onNodeSelect={(event, value) => this.nodeSelected(event, value)}
-                            onNodeToggle={(event, nodeIds) => this.nodeToggle(event, nodeIds)}
+                            onNodeSelect={(event, value) => this.nodeSelected(value)}
+                            onNodeToggle={(event, nodeIds) => this.nodeToggle(nodeIds)}
                             selectedNodeId={(this.state.selectedNode?.id.toString() ?? "0")}
                             expandedTreeNodes={this.state.expandedTreeNodes}>
                         </Sidebar>
@@ -186,7 +192,7 @@ class MainLayout extends Component {
         )
     }
 
-    nodeSelected(event, value) {
+    nodeSelected(value) {
         localStorage.setItem('directoryTreeSelectedNodeId', value)
         if (this.state.cache) {
             this.setState({
@@ -203,9 +209,9 @@ class MainLayout extends Component {
         })
         this.service.deleteItem(this.state.selectedNode.id, (id) => {
             const currentNode = this.state.selectedNode
-            
-            if(currentNode.prevLeaf) {
-                if(currentNode.nextLeaf) {
+
+            if (currentNode.prevLeaf) {
+                if (currentNode.nextLeaf) {
                     currentNode.nextLeaf.prevLeaf = currentNode.prevLeaf
                     currentNode.prevLeaf.nextLeaf = currentNode.nextLeaf
                 } else {
@@ -238,8 +244,8 @@ class MainLayout extends Component {
             rotateEnabled: false
         })
         this.service.rotateItem(this.state.selectedNode.id, (id) => {
-                this.forceUpdate()
-            },
+            this.forceUpdate()
+        },
             () => {
                 this.setState({
                     rotateEnabled: true
@@ -267,23 +273,41 @@ class MainLayout extends Component {
         }
     }
 
-    prevNode() {
-        const currentNode = this.state.selectedNode
+    setCurrentNode(newNode) {
+        if (newNode) {
+            this.setState({
+                selectedNode: newNode
+            })
+        }
 
-        this.setState({
-            selectedNode: currentNode.prevLeaf
-        })
+        this.ensureNodeIsUnfolded(newNode)
+    }
+
+    prevNode() {
+        this.setCurrentNode(this.state.selectedNode?.prevLeaf)
     }
 
     nextNode() {
-        const currentNode = this.state.selectedNode
-
-        this.setState({
-            selectedNode: currentNode.nextLeaf
-        })
+        this.setCurrentNode(this.state.selectedNode?.nextLeaf)
     }
 
-    nodeToggle(event, nodeIds) {
+    ensureNodeIsUnfolded(node) {
+        let currentNode = node
+        let expandedNodes = [...this.state.expandedTreeNodes]
+
+        while (currentNode) {
+            if ((currentNode.children?.length ?? 0) > 0
+                && !expandedNodes.includes(currentNode.id)) {
+                expandedNodes.push(currentNode.id)
+            }
+
+            currentNode = currentNode.parent
+        }
+
+        this.nodeToggle(expandedNodes)
+    }
+
+    nodeToggle(nodeIds) {
         localStorage.setItem('directoryTreeState', JSON.stringify(nodeIds))
         this.setState({
             expandedTreeNodes: nodeIds
