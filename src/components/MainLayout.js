@@ -16,7 +16,7 @@ class MainLayout extends Component {
             directoryTree: {},
             expandedTreeNodes: [],
             selectedNode: null,
-            cache: [],
+            cache: {},
             deleteEnabled: true,
             rotateEnabled: true
         };
@@ -88,7 +88,7 @@ class MainLayout extends Component {
         })
 
         if (this.defaultNodeSelected) {
-            this.nodeSelected(null, this.defaultNodeSelected)
+            this.nodeSelected(this.defaultNodeSelected)
         }
     }
 
@@ -198,6 +198,7 @@ class MainLayout extends Component {
             this.setState({
                 selectedNode: this.findSelectedNode(value)
             })
+            this.defaultNodeSelected = null
         } else {
             this.defaultNodeSelected = value
         }
@@ -227,9 +228,10 @@ class MainLayout extends Component {
                 return (node.id !== id)
             })
 
+            this.createCache(newTree)
+
             this.setState({
-                directoryTree: newTree,
-                cache: this.createCache(newTree)
+                directoryTree: newTree
             })
         },
             () => {
@@ -294,17 +296,21 @@ class MainLayout extends Component {
     ensureNodeIsUnfolded(node) {
         let currentNode = node
         let expandedNodes = [...this.state.expandedTreeNodes]
+        let nodeWasAdded = false
 
         while (currentNode) {
             if ((currentNode.children?.length ?? 0) > 0
                 && !expandedNodes.includes(currentNode.id)) {
                 expandedNodes.push(currentNode.id)
+                nodeWasAdded = true
             }
 
             currentNode = currentNode.parent
         }
 
-        this.nodeToggle(expandedNodes)
+        if (nodeWasAdded) {
+            this.nodeToggle(expandedNodes)
+        }
     }
 
     nodeToggle(nodeIds) {
