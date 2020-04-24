@@ -14,6 +14,7 @@ class MainLayout extends Component {
         this.state = {
             visible: true,
             directoryTree: {},
+            expandedTreeNodes: [],
             selectedNode: null,
             cache: [],
             deleteEnabled: true,
@@ -29,10 +30,17 @@ class MainLayout extends Component {
         this.service.fetchAlbumInfo((data) => {
             self.createCache(data)
             const selectedNode = self.state.cache[selectedNodeId]
+            
+            let expandedTreeNodes = []
+            const stateStr = localStorage.getItem('directoryTreeState')
+            if(stateStr) {
+                expandedTreeNodes = JSON.parse(stateStr)
+            }
 
             self.setState({
                 directoryTree: data,
-                selectedNode: selectedNode
+                selectedNode,
+                expandedTreeNodes,
             })
         })
     }
@@ -131,7 +139,9 @@ class MainLayout extends Component {
 
                         <Sidebar treeData={this.state.directoryTree}
                             onNodeSelect={(event, value) => this.nodeSelected(event, value)}
-                            selectedNodeId={(this.state.selectedNode?.id.toString() ?? "0")}>
+                            onNodeToggle={(event, nodeIds) => this.nodeToggle(event, nodeIds)}
+                            selectedNodeId={(this.state.selectedNode?.id.toString() ?? "0")}
+                            expandedTreeNodes={this.state.expandedTreeNodes}>
                         </Sidebar>
                     </Grid>
                 </Grid>
@@ -270,6 +280,13 @@ class MainLayout extends Component {
 
         this.setState({
             selectedNode: currentNode.nextLeaf
+        })
+    }
+
+    nodeToggle(event, nodeIds) {
+        localStorage.setItem('directoryTreeState', JSON.stringify(nodeIds))
+        this.setState({
+            expandedTreeNodes: nodeIds
         })
     }
 }

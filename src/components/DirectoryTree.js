@@ -7,23 +7,6 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
 class DirectoryTree extends Component {
-    constructor() {    
-      super(...arguments);   
-      
-      let expandedState = []
-      const stateStr = localStorage.getItem('directoryTreeState')
-      if(stateStr) {
-        expandedState = JSON.parse(stateStr)
-      }
-          
-      this.state = {      
-          expanded: expandedState
-      };
-    }
-
-    componentDidMount() {
-    }
-
     render() {
 
         const classes = makeStyles({
@@ -46,27 +29,26 @@ class DirectoryTree extends Component {
             defaultCollapseIcon={<ExpandMoreIcon />}
             defaultExpandIcon={<ChevronRightIcon />}
             selected={this.props.selectedNodeId}
-            expanded={this.state.expanded}
+            expanded={this.props.expandedTreeNodes}
             onNodeSelect={this.props.onNodeSelect}
-            onNodeToggle={(event, nodeIds) => this.nodeToggle(event, nodeIds)}
+            onNodeToggle={this.props.onNodeToggle}
           >
             {renderTree(this.props.treeData)}
           </TreeView>
         )
-    }
-
-    nodeToggle(event, nodeIds) {
-      localStorage.setItem('directoryTreeState', JSON.stringify(nodeIds))
-      this.setState({
-        expanded: nodeIds
-      })
     }
 }
 
 DirectoryTree.propTypes = {
   treeData : PropTypes.object,
   onNodeSelect : PropTypes.func,
-  selectedNodeId : PropTypes.string
+  onNodeToggle : PropTypes.func,
+  selectedNodeId : PropTypes.string,
+  expandedTreeNodes : PropTypes.arrayOf(PropTypes.string)
 }
+
+DirectoryTree.defaultProps = {
+  expandedTreeNodes: []
+};
 
 export default DirectoryTree;
