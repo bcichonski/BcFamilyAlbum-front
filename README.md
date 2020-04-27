@@ -2,6 +2,7 @@
 
 # Changelog
 ```
+0.1.8 2020-04-27          Add widget for quicksearch. Feature still in progress.
 0.1.7 2020-04-24          Refactor where expanded album tree nodes state is stored. Tree is unfolding to currently selected node when 
                           browsing using nav buttons
 0.1.6 2020-04-23 1ec37af9 FIX issue with navigation after album item removal

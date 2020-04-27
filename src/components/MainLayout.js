@@ -16,9 +16,9 @@ class MainLayout extends Component {
             directoryTree: {},
             expandedTreeNodes: [],
             selectedNode: null,
-            cache: {},
             deleteEnabled: true,
-            rotateEnabled: true
+            rotateEnabled: true,
+            searchPhrase: ''
         };
         this.service = new BackendService('https://localhost:44332/')
     }
@@ -29,7 +29,7 @@ class MainLayout extends Component {
 
         this.service.fetchAlbumInfo((data) => {
             self.createCache(data)
-            const selectedNode = self.state.cache[selectedNodeId]
+            const selectedNode = self.cache[selectedNodeId]
 
             let expandedTreeNodes = []
             const stateStr = localStorage.getItem('directoryTreeState')
@@ -52,9 +52,11 @@ class MainLayout extends Component {
     }
 
     createCacheInternal(cache, node, prevLeaf) {
-        if (typeof node.id !== 'undefined') {
-            cache[node.id] = node
+        if (typeof node.id === 'undefined') {
+            node.id = 'thealbum'
         }
+
+        cache[node.id] = node
 
         if (node.children) {
             for (const subitem of node.children) {
@@ -79,13 +81,8 @@ class MainLayout extends Component {
     }
 
     createCache(data) {
-        const cache = {}
-
-        this.createCacheInternal(cache, data)
-
-        this.setState({
-            cache
-        })
+        this.cache = {}
+        this.createCacheInternal(this.cache, data)
 
         if (this.defaultNodeSelected) {
             this.nodeSelected(this.defaultNodeSelected)
@@ -93,7 +90,7 @@ class MainLayout extends Component {
     }
 
     findSelectedNode(nodeId) {
-        return this.state?.cache[nodeId] ?? undefined
+        return this?.cache[nodeId] ?? undefined
     }
 
     endsWithAny(suffixes, string) {
@@ -143,11 +140,14 @@ class MainLayout extends Component {
                             </IconButton>
                         </Grid>
 
-                        <Sidebar treeData={this.state.directoryTree}
+                        <Sidebar treeData={this.filterDirectoryTree()}
                             onNodeSelect={(event, value) => this.nodeSelected(value)}
                             onNodeToggle={(event, nodeIds) => this.nodeToggle(nodeIds)}
                             selectedNodeId={(this.state.selectedNode?.id.toString() ?? "0")}
-                            expandedTreeNodes={this.state.expandedTreeNodes}>
+                            expandedTreeNodes={this.state.expandedTreeNodes}
+                            searchPhrase={this.state.searchPhrase}
+                            onSearchPhraseChange={(event) => this.searchPhraseChanged(event)}
+                            >
                         </Sidebar>
                     </Grid>
                 </Grid>
@@ -192,9 +192,24 @@ class MainLayout extends Component {
         )
     }
 
+    filterDirectoryTree() {
+        if(this.state.searchPhrase === '')
+        {
+            return this.state.directoryTree
+        }
+
+
+    }
+
+    searchPhraseChanged(text) {
+        this.setState({
+            searchPhrase : text
+        })
+    }
+
     nodeSelected(value) {
         localStorage.setItem('directoryTreeSelectedNodeId', value)
-        if (this.state.cache) {
+        if (this.cache) {
             this.setState({
                 selectedNode: this.findSelectedNode(value)
             })
@@ -228,7 +243,8 @@ class MainLayout extends Component {
                 return (node.id !== id)
             })
 
-            this.createCache(newTree)
+            this.cache = {}
+            this.createCacheInternal(this.cache, newTree)
 
             this.setState({
                 directoryTree: newTree
