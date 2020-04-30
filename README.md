@@ -2,6 +2,7 @@
 
 # Changelog
 ```
+0.1.9 2020-04-30          Add small appbar to hide buttons and organize space around search input
 0.1.8 2020-04-27          Add widget for quicksearch. Feature still in progress.
 0.1.7 2020-04-24          Refactor where expanded album tree nodes state is stored. Tree is unfolding to currently selected node when 
                           browsing using nav buttons

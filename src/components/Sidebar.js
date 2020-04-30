@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Grid from '@material-ui/core/Grid'
 import DirectoryTree from './DirectoryTree'
-import QuickSearch from './QuickSearch'
+import CustomAppBar from './CustomAppBar'
 
 function Sidebar(props) {
     return (
@@ -12,8 +12,10 @@ function Sidebar(props) {
             alignItems="flex-start"
         >
             <Grid item>
-                <QuickSearch searchPhrase={props.searchPhrase}
-                 onChange={props.onSearchPhraseChange} />
+                <CustomAppBar searchPhrase={props.searchPhrase}
+                 onSearchPhraseChange={props.onSearchPhraseChange}
+                 onTreeFolding={props.onTreeFolding}
+                 onHideSidebar={props.onHideSidebar} />
             </Grid>
             <Grid item>
                 <DirectoryTree treeData={props.treeData}
@@ -33,6 +35,8 @@ Sidebar.propTypes = {
     onNodeToggle: PropTypes.func,
     selectedNodeId: PropTypes.string,
     onSearchPhraseChange: PropTypes.func,
+    onHideSidebar: PropTypes.func,
+    onTreeFolding: PropTypes.func,
     searchPhrase: PropTypes.string
 }
 

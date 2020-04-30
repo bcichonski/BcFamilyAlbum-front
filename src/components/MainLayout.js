@@ -3,8 +3,6 @@ import Grid from '@material-ui/core/Grid'
 import Fab from '@material-ui/core/Fab'
 import Sidebar from './Sidebar'
 import MainViewer from './MainViewer'
-import IconButton from '@material-ui/core/IconButton'
-import MenuOpenIcon from '@material-ui/icons/MenuOpen'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import BackendService from '../services/BackendService'
 
@@ -130,15 +128,6 @@ class MainLayout extends Component {
                             flexGrow: 0,
                             flexWrap: 'nowrap'
                         }}>
-                        <Grid item className='hide-menu'>
-                            <IconButton aria-label="hide menu" onClick={() => {
-                                this.setState({
-                                    visible: false
-                                })
-                            }}>
-                                <MenuOpenIcon />
-                            </IconButton>
-                        </Grid>
 
                         <Sidebar treeData={this.filterDirectoryTree()}
                             onNodeSelect={(event, value) => this.nodeSelected(value)}
@@ -147,6 +136,8 @@ class MainLayout extends Component {
                             expandedTreeNodes={this.state.expandedTreeNodes}
                             searchPhrase={this.state.searchPhrase}
                             onSearchPhraseChange={(event) => this.searchPhraseChanged(event)}
+                            onHideSidebar={() => this.onHideSidebar()}
+                            onTreeFolding={() => this.onTreeFolding()}
                             >
                         </Sidebar>
                     </Grid>
@@ -199,6 +190,18 @@ class MainLayout extends Component {
         }
 
 
+    }
+
+    onHideSidebar() {
+        this.setState({
+            visible: false
+        })
+    }
+
+    onTreeFolding() {
+        this.setState({
+            expandedTreeNodes: []
+        })
     }
 
     searchPhraseChanged(text) {
