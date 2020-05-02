@@ -136,6 +136,7 @@ function CustomAppBar(props) {
                             }}
                             inputProps={{ 'aria-label': 'search' }}
                             value={props.searchPhrase}
+                            onChange={(event)=>props.onSearchPhraseChange(event.target.value)}
                         />
                     </div>
                 </Toolbar>

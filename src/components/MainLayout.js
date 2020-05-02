@@ -9,9 +9,13 @@ import BackendService from '../services/BackendService'
 class MainLayout extends Component {
     constructor() {
         super(...arguments);
+
+        const emptyNode = {id:'abbaabbaa', name:'No data...'}
+
         this.state = {
             visible: true,
-            directoryTree: {},
+            directoryTree: emptyNode,
+            filteredTree: emptyNode,
             expandedTreeNodes: [],
             selectedNode: null,
             deleteEnabled: true,
@@ -41,6 +45,7 @@ class MainLayout extends Component {
 
             self.setState({
                 directoryTree: data,
+                filteredTree: this.filterDirectoryTreeInternal(self.state.searchPhrase, data, null),
                 selectedNode,
                 expandedTreeNodes,
             })
@@ -129,7 +134,7 @@ class MainLayout extends Component {
                             flexWrap: 'nowrap'
                         }}>
 
-                        <Sidebar treeData={this.filterDirectoryTree()}
+                        <Sidebar treeData={this.state.filteredTree}
                             onNodeSelect={(event, value) => this.nodeSelected(value)}
                             onNodeToggle={(event, nodeIds) => this.nodeToggle(nodeIds)}
                             selectedNodeId={(this.state.selectedNode?.id.toString() ?? "0")}
@@ -183,13 +188,59 @@ class MainLayout extends Component {
         )
     }
 
-    filterDirectoryTree() {
-        if(this.state.searchPhrase === '')
+    filterDirectoryTree(phrase) {
+        if(phrase === '')
         {
             return this.state.directoryTree
         }
 
+        return this.filterDirectoryTreeInternal(phrase, this.state.directoryTree, null)
+    }
 
+    filterDirectoryTreeInternal(phrase, node, prevLeaf) {
+        const containsPhrase = node.name.indexOf(phrase) > -1
+        if (node.children && node.children.length > 0) {
+
+            let newChildren = []
+            for (const subitem of node.children) {
+                const subNode = this.filterDirectoryTreeInternal(phrase, subitem, prevLeaf)
+
+                if(subNode) {
+                    subNode.prevLeaf = prevLeaf
+
+                    if(prevLeaf) {
+                        prevLeaf.nextLeaf = subNode
+                    }
+                    
+                    if(!subNode.children || subNode.children.length === 0) {
+                        prevLeaf = subNode
+                    }
+
+                    newChildren.push(subNode)
+                }
+            }
+
+            if(newChildren.length > 0 || containsPhrase) {
+                let newNode = this.shallowCloneNode(node)
+                newNode.children = newChildren
+                return newNode
+            }
+        } else {
+            if(containsPhrase) {
+                return this.shallowCloneNode(node)
+            }
+        }
+        return null
+    }
+
+    shallowCloneNode(node) {
+        return {
+            id: node.id,
+            name: node.name,
+            label: node.label,
+            parent: node.parent,
+            children: []
+        }
     }
 
     onHideSidebar() {
@@ -205,9 +256,17 @@ class MainLayout extends Component {
     }
 
     searchPhraseChanged(text) {
-        this.setState({
-            searchPhrase : text
-        })
+        if(this.searchThrottle) {
+            clearTimeout(this.searchThrottle)
+        }
+
+        this.searchThrottle = setTimeout(() => {
+            this.setState({
+                searchPhrase : text,
+                filteredTree: this.filterDirectoryTree(text)
+            })
+            this.searchThrottle = null
+        }, 300)
     }
 
     nodeSelected(value) {
@@ -279,6 +338,7 @@ class MainLayout extends Component {
             const newSource = {
                 id: source.id,
                 name: source.name,
+                label: source.label,
                 children: []
             }
 
