@@ -2,6 +2,7 @@
 
 # Changelog
 ```
+0.2.1 2020-05-02          FIX some accesibility issues with navigation when watching a video.
 0.2.0 2020-05-02          Write algorithm for actual serving search results. Fix non-strict React error by removing strict mode.
 0.1.9 2020-04-30          Add small appbar to hide buttons and organize space around search input
 0.1.8 2020-04-27          Add widget for quicksearch. Feature still in progress.

@@ -26,6 +26,7 @@ class MainViewer extends Component {
           subitem = (
             <Player
               src={this.props.itemUrl}
+              height='100%'
               autoPlay={true}
               fluid={false}
             >
